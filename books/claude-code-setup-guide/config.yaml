@@ -1,0 +1,15 @@
+title: "Claude Code 完全セットアップガイド — 現場で即使える実践パターン集"
+summary: "Claude Code CLIを「なんとなく使っている」状態から「プロジェクトに最適化された開発パートナー」に変える実践ガイド。CLAUDE.md設計、Hooks、MCP、カスタムスキル、チーム開発まで7章で網羅。"
+topics: ["claudecode", "ai", "cli", "開発効率化"]
+published: true
+price: 980
+chapters:
+  - intro
+  - chapter1
+  - chapter2
+  - chapter3
+  - chapter4
+  - chapter5
+  - chapter6
+  - chapter7
+  - conclusion
