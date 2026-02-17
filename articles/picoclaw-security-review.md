@@ -58,7 +58,7 @@ PicoClawの親プロジェクトOpenClaw（180K Stars）は壊滅的状況:
 - **CVE-2026-25253**（CVSS 8.8）: リンククリックだけで認証トークン窃取→リモートコード実行
 - **40,000以上のインスタンス**がデフォルト設定でインターネットに露出
 - 公開スキルの**12〜20%がマルウェア**（Koi Security / Bitdefender調査）
-- 情報窃取マルウェアがOpenClawの設定ファイルとトークンを標的にする事例が確認済み
+- 2月13日にVidar系infostealerがOpenClaw設定ファイルを初窃取（Hudson Rock報告）。PicoClawも同リスクあり
 
 ## データ送信先の分析
 
