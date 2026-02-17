@@ -28,6 +28,7 @@ published: true
 | RAM | 10MB未満 |
 | 起動時間 | 1秒以下 |
 | リリース | 2026年2月9日 |
+| 最新版 | v0.1.1（2026年2月13日） |
 
 OpenClawの超軽量版として、ターミナルベースのAIエージェント。ファイル操作、コマンド実行、Web検索、メッセージング連携（Discord/Telegram/Slack/QQ/LINE）が可能。
 
@@ -47,22 +48,24 @@ GitHub Issue #179で報告。`handleSlashCommand`と`handleAppMention`で`IsAllo
 
 `allowFrom`ホワイトリストを設定しても、Slackワークスペース内の**誰でも**Botを操作できてしまう。
 
-### 3. ワークスペースパス制限の突破（深刻度: 中）
+### 3. cronジョブのパス制限突破（深刻度: 中）
 
-2月15日のPRで修正されたが、それ以前のバージョンでは`workspace.restricted: true`に設定しても、意図したディレクトリ外のファイルにアクセス可能だった。
+`pkg/tools/cron.go:36`で`restrict=false`のExecToolが作成され、スケジュール実行コマンドがワークスペース外にアクセス可能。PR #186で修正提出されたが、v0.1.1時点で未マージの可能性あり。SECURITY.mdも未設定。
 
 ### 4. OpenClawエコシステムの問題
 
-PicoClawの親プロジェクトOpenClawは:
-- 30,000以上のインスタンスがインターネットに露出
-- トークン窃取のRCEチェーンを含む40以上の脆弱性が2026年2月12日に修正
-- Aikido社のレポートで「セキュアにしようとすること自体が滑稽」と評される状態
+PicoClawの親プロジェクトOpenClaw（180K Stars）は壊滅的状況:
+- **CVE-2026-25253**（CVSS 8.8）: リンククリックだけで認証トークン窃取→リモートコード実行
+- **40,000以上のインスタンス**がデフォルト設定でインターネットに露出
+- 公開スキルの**12〜20%がマルウェア**（Koi Security / Bitdefender調査）
+- 情報窃取マルウェアがOpenClawの設定ファイルとトークンを標的にする事例が確認済み
 
 ## データ送信先の分析
 
 ### PicoClaw自体
-- テレメトリ通信: 確認されていない
-- OSSでコード監査可能（MIT License）
+- 公式プライバシーポリシーで**「テレメトリなし、メトリクスなし」**と明言
+- コード監査上、テレメトリ通信は確認されていない（MIT License、Go製OSS）
+- ただしv1.0未満の早期段階であり、独立した第三者検証レポートは未公開
 
 ### 外部サービスへの送信
 1. **LLM API**: OpenRouter, Anthropic, OpenAI, DeepSeek, Groq, Zhipu AI等にプロンプトを送信
@@ -118,5 +121,8 @@ PicoClaw自体にバックドアがあるかはOSSなので検証可能。しか
 
 - [PicoClaw GitHub](https://github.com/sipeed/picoclaw)
 - [Issue #179 - Slack allow list bypass](https://github.com/sipeed/picoclaw/issues/179)
+- [CVE-2026-25253 - SOCRadar](https://socradar.io/blog/cve-2026-25253-rce-openclaw-auth-token/)
+- [OpenClaw 1-Click RCE - The Hacker News](https://thehackernews.com/2026/02/openclaw-bug-enables-one-click-remote.html)
+- [AI Agent Trust Crisis - Pixee](https://www.pixee.ai/weekly-briefings/openclaw-malware-ai-agent-trust-2026-02-11)
 - [Aikido - Why Trying to Secure OpenClaw is Ridiculous](https://www.aikido.dev/blog/why-trying-to-secure-openclaw-is-ridiculous)
 - [SOPHOS - OpenClaw experiment warning](https://www.sophos.com/en-us/blog/the-openclaw-experiment-is-a-warning-shot-for-enterprise-ai-security)
